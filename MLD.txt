@@ -1,0 +1,70 @@
+Proprio(  #nom:string,
+        periode_debut:date,
+        periode_fin:date,
+        #id_animal=>Animal)
+
+Veto( #nom:string,
+        periode_debut:date,
+        periode_fin: date,
+        #id_animal=>Animal)
+
+Client(#id_client : int,
+        nom : string,
+        prenom : string,
+        date de naissance : date,
+        adresse : string,
+        numero de telephone : string)
+        PROJECTION(Client,id_client) != PROJECTION(Personnel,id_personnel)
+
+Animal(#id_animal:int,
+        nom:string,
+        date_de_naissance:date,
+        num_puce: int,
+        passeport: int,
+        #type => Espece,
+        #id_client => Client)
+AVEC date_de_naissance peut être année ou NULL
+
+Espece( #type : {félins, canidés, reptiles, rongeurs, oiseaux, autres} )
+
+Personnel(#id_personnel : int,
+        nom : string,
+        prenom : string,
+        date de naissance : date,
+        adresse : string,
+        numero de telephone : string
+        poste : {vétérinaire, assistant})
+        AVEC id_client != id_personnel
+
+Medicament(#nom_molecule:string, 
+        description_effet:string )
+
+Traitement(#nom:string,
+        datedebut:date,
+        duree:date,
+        quantité:int,
+        #id_dossier=>Dossier
+        personnel=>Personnel)
+        AVEC personnel UNIQUE
+
+Dossier(
+        #id_dossier : int,
+        taille:int,
+        poids:int,
+        resultat_analyse:string,
+        observation: string,
+        véto_observation:string,
+        procedure: string, description_procedure:string,
+        id_animal=>Animal)
+        AVEC animal UNIQUE
+
+Entree(type : {taille, poids, resultat_analyse, observation, véto_observation, procedure, description_procedure},
+        #heure_saisie : time,
+        #date_saisie : date,
+        #id_dossier=>Dossier)
+
+AssocMedicamentEspece(#nom_molécule=>Medicament,#type=>Espece)
+
+AssocPersonnelEspece(#id_personnel=>Personnel,#type=>Espece)
+
+AssocTraitementMedicament(#nom_molécule=>Médicaments,#traitement=>Traitement)
